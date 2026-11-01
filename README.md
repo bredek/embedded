@@ -7,6 +7,7 @@ A collection of my embedded projects. Each project lives in its own folder under
 | Project | Board | Description |
 | --- | --- | --- |
 | [blink](projects/blink) | Freenove ESP32-S3 WROOM | Two LEDs with button-switched blinking modes |
+| [voltage-divider](projects/voltage-divider) | Freenove ESP32-S3 WROOM | Photoresistor voltage divider that switches a relay on in the dark |
 
 ## Layout
 

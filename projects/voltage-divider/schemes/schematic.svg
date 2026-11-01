@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 810" width="1360" height="810" font-family="[]" role="img" aria-label="Принципова схема Лаби 6: фоторезистор на GPIO4, GPIO21 через 10 кОм на базу BC547B, колектор на IN модуля реле з активним низьким рівнем, реле вмикає LED від 5 В" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYToyYmUzYzliYS1mZmQ0LTQ5ZjMtOGZiNy1jNTllZGI2MjMwZjQAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaBBWhfnUjp9PQL9zFMr91ocAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDplOTI0ZDg0YS05YjU2LTQwYjQtODZiMS0zMTRkMjJlYWMwZmJscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoqH9OltnEg6lDnJExl5LiLgAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggY+QLc5e39nkSZKfl8IepevY0Cnhrpih5M3KUtKYKQRKkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaJqVBpGL5UAalSqiCcNT4/UAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIPkak5TQqj5cfYbLiN75EhxKjfy0zSFEWhuWpgP3xBe2ZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GQHKZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjJiZTNjOWJhLWZmZDQtNDlmMy04ZmI3LWM1OWVkYjYyMzBmNC9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjYxNTg4YzY4LTk4ZmUtNDFhNS1hMTQxLTk3MzBhNjE1MGEwZnJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCBj5Atzl7f2eRJkp+Xwh6l69jQKeGumKHkzcpS0pgpBEqJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggXsBn0knC9W2XAFarEn1civ4tKToDKXhFo9jdIMb31RWiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFgg/t/9mjUNMES3Aaj/qCsbCuUMeBh7FCciy1b/FrK1RhF0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQND7eQCToV2JXycrHuzmdJGALHILo03SGwC7+BkvLJgfzcGvBLN6rmFyhph+qI+r12+nT/RE+N74KR8d3q2DMUk=</c2pa:manifest></metadata>
+<rect width="1360" height="810" rx="16" fill="#ffffff"/>
+<text x="30.0" y="44.0" font-size="26" font-weight="800" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">Лаба 6: принципова схема (стан «темно»: реле увімкнене)</text>
+<text x="30.0" y="70.0" font-size="14" font-weight="500" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">Ліворуч ESP32-S3, посередині наш ключ на BC547B, праворуч модуль реле з набору (те, що всередині пунктиру, вже спаяно на модулі).</text>
+<rect x="40" y="110" width="220" height="540" rx="12" fill="#f3f4f6" stroke="#111827" stroke-width="2.4"/>
+<text x="58.0" y="142.0" font-size="18" font-weight="800" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">DD1 ESP32-S3</text>
+<text x="58.0" y="163.0" font-size="13" font-weight="500" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">N16R8, DevKitC-1</text>
+<text x="248.0" y="205.0" font-size="15" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">5V</text>
+<path d="M260.0 200.0 L284.0 200.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="248.0" y="265.0" font-size="15" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">3V3</text>
+<path d="M260.0 260.0 L284.0 260.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="248.0" y="355.0" font-size="15" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">GPIO4 (ADC1_CH3)</text>
+<path d="M260.0 350.0 L284.0 350.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="248.0" y="535.0" font-size="15" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">GPIO21</text>
+<path d="M260.0 530.0 L284.0 530.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="248.0" y="615.0" font-size="15" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">GND</text>
+<path d="M260.0 610.0 L284.0 610.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="58.0" y="222.0" font-size="12" font-weight="500" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">(5 В з USB)</text>
+<path d="M284.0 200.0 L300.0 200.0 L300.0 150.0 L1080.0 150.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="312" y="126" width="64" height="20" rx="4" fill="#ffedd5" stroke="#ea580c"/>
+<text x="344.0" y="141.0" font-size="13" font-weight="800" fill="#9a3412" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">+5 В</text>
+<path d="M284.0 260.0 L400.0 260.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M400.0 260.0 L400.0 277.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M400.0 333.0 L400.0 350.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="391" y="277.0" width="18" height="56" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<path d="M350.0 277.0 L380.0 291.0" fill="none" stroke="#d97706" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M380 291.0 l-9 0 l4 -7 z" fill="#d97706"/>
+<path d="M350.0 295.0 L380.0 309.0" fill="none" stroke="#d97706" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M380 309.0 l-9 0 l4 -7 z" fill="#d97706"/>
+<text x="418.0" y="303.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">R1 фоторезистор</text>
+<text x="418.0" y="321.0" font-size="12" font-weight="500" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">5516: 2 кОм…0,5 МОм</text>
+<circle cx="400" cy="350" r="4.5" fill="#111827"/>
+<path d="M284.0 350.0 L400.0 350.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M400.0 350.0 L400.0 372.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M400.0 428.0 L400.0 450.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="391" y="372.0" width="18" height="56" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<text x="418.0" y="398.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">R2 10 кОм</text>
+<path d="M400.0 450.0 L400.0 464.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M386.0 464.0 L414.0 464.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M391.0 470.0 L409.0 470.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M396.0 476.0 L404.0 476.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="272" y="362" width="120" height="22" rx="5" fill="#fef3c7" stroke="#d97706"/>
+<text x="332.0" y="378.0" font-size="12.5" font-weight="700" fill="#92400e" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">0,06…2,75 В</text>
+<path d="M284.0 530.0 L367.0 530.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M423.0 530.0 L506.0 530.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="367.0" y="521" width="56" height="18" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<text x="395.0" y="515.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">R3 10 кОм</text>
+<circle cx="540" cy="530" r="24" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+<path d="M506.0 530.0 L531.0 530.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M531.0 516.0 L531.0 544.0" fill="none" stroke="#111827" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M531.0 524.0 L552.0 510.0 L552.0 496.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M531.0 536.0 L552.0 550.0 L552.0 564.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="548.0,547.0 542.5,537.3 536.9,545.6" fill="#111827"/>
+<text x="570.0" y="560.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">VT1 BC547B</text>
+<path d="M552.0 496.0 L552.0 400.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="552" cy="400" r="4.5" fill="#111827"/>
+<circle cx="552" cy="150" r="4.5" fill="#111827"/>
+<path d="M552.0 150.0 L552.0 247.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M552.0 303.0 L552.0 400.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="543" y="247.0" width="18" height="56" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<text x="570.0" y="273.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">R4 10 кОм</text>
+<text x="570.0" y="291.0" font-size="12" font-weight="500" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">підтяжка до 5 В</text>
+<path d="M552.0 564.0 L552.0 720.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="552" cy="720" r="4.5" fill="#111827"/>
+<path d="M284.0 610.0 L284.0 720.0 L552.0 720.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M450.0 720.0 L450.0 734.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M436.0 734.0 L464.0 734.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M441.0 740.0 L459.0 740.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M446.0 746.0 L454.0 746.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="450" cy="720" r="4.5" fill="#111827"/>
+<rect x="320" y="541" width="88" height="20" rx="4" fill="#dbeafe" stroke="#1d4ed8"/>
+<text x="364.0" y="556.0" font-size="12.5" font-weight="800" fill="#1d4ed8" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">HIGH 3,3 В</text>
+<rect x="440" y="541" width="88" height="20" rx="4" fill="#dbeafe" stroke="#1d4ed8"/>
+<text x="484.0" y="556.0" font-size="12.5" font-weight="800" fill="#1d4ed8" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">база 0,7 В</text>
+<rect x="560" y="403" width="88" height="20" rx="4" fill="#ede9fe" stroke="#6d28d9"/>
+<text x="604.0" y="418.0" font-size="12.5" font-weight="800" fill="#6d28d9" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">IN ≈ 0,1 В</text>
+<rect x="680" y="175" width="520" height="515" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="694.0" y="676.0" font-size="13.5" font-weight="800" fill="#334155" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">U1 модуль реле 5 В, «активний LOW» (так на кресленні курсу)</text>
+<path d="M552.0 400.0 L680.0 400.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="686.0" y="422.0" font-size="13" font-weight="800" fill="#6d28d9" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">IN</text>
+<path d="M680.0 400.0 L700.0 400.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M756.0 400.0 L776.0 400.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="700.0" y="391" width="56" height="18" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<text x="728.0" y="385.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">R1.2 1 кОм</text>
+<circle cx="810" cy="400" r="24" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+<path d="M776.0 400.0 L801.0 400.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M801.0 386.0 L801.0 414.0" fill="none" stroke="#111827" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M801.0 394.0 L822.0 380.0 L822.0 366.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M801.0 406.0 L822.0 420.0 L822.0 434.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="808.0,387.0 819.1,385.6 813.5,377.3" fill="#111827"/>
+<text x="838.0" y="404.0" font-size="13" font-weight="700" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">VT1.1 PNP</text>
+<path d="M822.0 366.0 L822.0 230.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M822.0 150.0 L822.0 230.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="822" cy="230" r="4.5" fill="#111827"/>
+<text x="828.0" y="193.0" font-size="13" font-weight="800" fill="#9a3412" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">VCC</text>
+<path d="M822.0 230.0 L1150.0 230.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M822.0 434.0 L822.0 480.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="822" cy="480" r="4.5" fill="#111827"/>
+<path d="M822.0 480.0 L1040.0 480.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="880" cy="480" r="4.5" fill="#111827"/>
+<path d="M880.0 480.0 L880.0 484.5" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M880.0 540.5 L880.0 545.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="871" y="484.5" width="18" height="56" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<text x="862.0" y="510.5" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">R1.3 1к</text>
+<path d="M880.0 545.0 L880.0 565.5" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M880.0 589.5 L880.0 610.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M868 565.5 L892 565.5 L880 587.5 Z" fill="#22c55e" stroke="#111827" stroke-width="2" stroke-linejoin="round"/>
+<path d="M868.0 588.5 L892.0 588.5" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M895.0 569.5 L907.0 560.5" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M895.0 578.5 L907.0 569.5" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="846.0" y="581.5" font-size="13" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">D1.2</text>
+<path d="M880.0 610.0 L880.0 640.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="980" cy="480" r="4.5" fill="#111827"/>
+<path d="M980.0 480.0 L980.0 516.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M980.0 564.0 L980.0 600.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="969" y="516.0" width="22" height="48" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<path d="M969.0 516.0 L991.0 564.0" fill="none" stroke="#111827" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="964.0" y="548.0" font-size="12.5" font-weight="800" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">RY1.1</text>
+<path d="M980.0 600.0 L980.0 640.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1040.0 480.0 L1040.0 530.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1040.0 550.0 L1040.0 600.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1030 550.0 L1050 550.0 L1040 531.0 Z" fill="#111827"/>
+<path d="M1030.0 530.0 L1050.0 530.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1054.0" y="545.0" font-size="12.5" font-weight="700" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">діод</text>
+<path d="M1040.0 600.0 L980.0 600.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="980" cy="600" r="4.5" fill="#111827"/>
+<path d="M1150.0 230.0 L1150.0 252.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1150.0 308.0 L1150.0 330.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="1141" y="252.0" width="18" height="56" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<text x="1132.0" y="278.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">R1.1 1к</text>
+<path d="M1150.0 330.0 L1150.0 353.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1150.0 377.0 L1150.0 400.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1138 353.0 L1162 353.0 L1150 375.0 Z" fill="#ef4444" stroke="#111827" stroke-width="2" stroke-linejoin="round"/>
+<path d="M1138.0 376.0 L1162.0 376.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1165.0 357.0 L1177.0 348.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1165.0 366.0 L1177.0 357.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1116.0" y="369.0" font-size="13" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">D1.1</text>
+<path d="M1150.0 400.0 L1150.0 640.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M880.0 640.0 L1150.0 640.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="980" cy="640" r="4.5" fill="#111827"/>
+<path d="M1000.0 640.0 L1000.0 690.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1000" cy="640" r="4.5" fill="#111827"/>
+<text x="1006.0" y="660.0" font-size="13" font-weight="800" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">GND</text>
+<path d="M1000.0 690.0 L1000.0 720.0 L552.0 720.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="640.0" y="714.0" font-size="12.5" font-weight="600" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">спільна земля GND: ESP32, VT1 і модуль</text>
+<path d="M1080.0 150.0 L1210.0 150.0 L1210.0 300.0 L1230.0 300.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1160.0" y="142.0" font-size="13" font-weight="800" fill="#9a3412" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">COM</text>
+<circle cx="1230" cy="300" r="3.5" fill="#111827"/>
+<circle cx="1280" cy="282" r="3.5" fill="none" stroke="#111827" stroke-width="2"/>
+<path d="M1284.0 282.0 L1300.0 282.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1280" cy="318" r="3.5" fill="none" stroke="#111827" stroke-width="2"/>
+<path d="M1284.0 318.0 L1300.0 318.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1230.0 300.0 L1277.0 284.0" fill="none" stroke="#111827" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M991.0 520.0 L1095.0 520.0 L1095.0 425.0 L1254.0 425.0 L1254.0 302.0" fill="none" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="5 4"/>
+<text x="1306.0" y="274.0" font-size="13" font-weight="800" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">NO</text>
+<text x="1306.0" y="334.0" font-size="13" font-weight="800" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">NC</text>
+<path d="M1300.0 282.0 L1320.0 282.0 L1320.0 380.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1320.0 380.0 L1320.0 397.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1320.0 453.0 L1320.0 470.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="1311" y="397.0" width="18" height="56" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+<text x="1302.0" y="423.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">R5</text>
+<text x="1302.0" y="441.0" font-size="12" font-weight="500" fill="#4b5563" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">220 Ом</text>
+<path d="M1320.0 470.0 L1320.0 493.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1320.0 517.0 L1320.0 540.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1308 493.0 L1332 493.0 L1320 515.0 Z" fill="#22c55e" stroke="#111827" stroke-width="2" stroke-linejoin="round"/>
+<path d="M1308.0 516.0 L1332.0 516.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1335.0 497.0 L1347.0 488.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1335.0 506.0 L1347.0 497.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1286.0" y="509.0" font-size="13" font-weight="700" fill="#1f2937" text-anchor="end" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">LED1</text>
+<path d="M1320.0 540.0 L1320.0 554.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1306.0 554.0 L1334.0 554.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1311.0 560.0 L1329.0 560.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1316.0 566.0 L1324.0 566.0" fill="none" stroke="#111827" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1240.0" y="590.0" font-size="12.5" font-weight="600" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">навантаження</text>
+<text x="30.0" y="768.0" font-size="13.5" font-weight="500" fill="#4b5563" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">Струм бази: (3,3 − 0,7) / 10 кОм ≈ 0,26 мА.  Струм колектора: ≈ 4,7 мА (R4 + вхід модуля).  Котушка: 5 В / 70 Ом ≈ 71 мА (її вмикає PNP на модулі).  LED1: (5 − 2) / 220 ≈ 13,6 мА.</text>
+<text x="30.0" y="790.0" font-size="13.5" font-weight="700" fill="#1f2937" text-anchor="start" font-family="'Segoe UI','Helvetica Neue',Roboto,'DejaVu Sans',Arial,sans-serif">GPIO21 = HIGH → VT1 відкритий → IN притиснутий до GND → PNP модуля відкритий → котушка під струмом → COM з’єднується з NO → LED1 світить.</text>
+</svg>
