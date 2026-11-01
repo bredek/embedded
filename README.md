@@ -1,14 +1,46 @@
-# ESP32 LED Blink
+# Embedded
 
-A PlatformIO project for the Freenove ESP32-S3 WROOM board using the Arduino framework. It controls two LEDs and uses two buttons to switch between blinking modes:
+A collection of my embedded projects. Each project lives in its own folder under `projects/` and is a self-contained PlatformIO project with its own `platformio.ini`, sources and README.
 
-- **Mode 1:** Both LEDs turn on and off together every 200 ms.
-- **Mode 2:** The LEDs turn on alternately, switching every second.
+## Projects
 
-Button presses are checked throughout each delay, so the mode can be changed while the LEDs are blinking. Mode changes are also printed to the serial monitor at 115200 baud.
+| Project | Board | Description |
+| --- | --- | --- |
+| [blink](projects/blink) | Freenove ESP32-S3 WROOM | Two LEDs with button-switched blinking modes |
 
-## Wiring diagram
+## Layout
 
-![ESP32-S3 wiring diagram](scheme.svg)
+```
+embedded/
+├── README.md
+└── projects/
+    └── <project>/
+        ├── platformio.ini
+        ├── include/
+        ├── lib/
+        ├── src/
+        ├── test/
+        └── README.md
+```
 
-Note: the diagram shows an external button on GPIO21 and the onboard BOOT button on GPIO0. The firmware currently reads buttons from pins 4 and 10 as defined in `src/config.h`; check the pin assignments against your wiring before running the project.
+## Working with a project
+
+Open the project folder (for example `projects/blink`) in VS Code with the PlatformIO extension, or use the CLI from inside it:
+
+```sh
+cd projects/blink
+pio run                 # build
+pio run -t upload       # flash
+pio device monitor      # serial monitor
+```
+
+## Adding a new project
+
+Create it under `projects/`:
+
+```sh
+mkdir projects/<name> && cd projects/<name>
+pio project init --board <board_id>
+```
+
+Then add a row to the table above.
