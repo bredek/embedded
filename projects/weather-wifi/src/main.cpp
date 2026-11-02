@@ -7,14 +7,28 @@
 #include <WebServer.h>
 #include <DHT.h>
 
-const char* WIFI_NAME = "TP-Link_3B5D";   // назва домашнього Wi-Fi
-const char* WIFI_PASS = "57358680";   // пароль
+#include "secrets.h"   // WIFI_NAME і WIFI_PASS (файл не потрапляє в git)
 
 #define DHT_PIN  4
 #define DHT_TYPE DHT11
 
+// --- Історія вимірів ---
+#define SAMPLE_SEC    300   // як часто записувати точку, секунд (для перевірки постав 10)
+#define HISTORY_SIZE  288   // 288 точок * 5 хв = 24 години
+#define FIRST_SAMPLE_MS 2000  // перша точка через ~2 с після старту
+#define NO_DATA       INT16_MIN  // значення "датчик не відповів"
+
 DHT dht(DHT_PIN, DHT_TYPE);
 WebServer server(80);
+
+// Кільцевий буфер: коли місце закінчується, нова точка затирає найстарішу.
+// Температура зберігається в десятих градуса (23.4 C -> 234), вологість у %.
+int16_t histT[HISTORY_SIZE];
+int16_t histH[HISTORY_SIZE];
+uint16_t histHead = 0;    // куди писати наступну точку
+uint16_t histCount = 0;   // скільки точок вже записано (максимум HISTORY_SIZE)
+uint32_t lastSampleMs = 0;  // millis() останнього запису
+bool firstSampleDone = false;
 
 const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
 <html lang="uk">
@@ -47,7 +61,7 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
   }
   .card svg { width: 56px; height: 56px; fill: none; stroke-width: 1.8;
               stroke-linecap: round; stroke-linejoin: round; }
-  .temp svg { stroke: var(--temp); } .hum svg { stroke: var(--hum); }
+  .temp svg { stroke: var(--temp); color: var(--temp); } .hum svg { stroke: var(--hum); }
   .value { font-size: 3.2rem; font-weight: 700; margin: 10px 0 2px; font-variant-numeric: tabular-nums; }
   .temp .value { color: var(--temp); } .hum .value { color: var(--hum); }
   .label { color: var(--muted); font-size: .95rem; }
@@ -55,6 +69,12 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
   .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
          background: #22c55e; margin-right: 6px; }
   .dot.err { background: #ef4444; }
+  .charts { display: grid; gap: 16px; margin-top: 16px; }
+  .chart-card { padding: 20px 16px 16px; }
+  .chart-card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 10px; }
+  .chart-card canvas { width: 100%; height: 180px; display: block; }
+  .chart-card .range { margin-top: 8px; color: var(--muted); font-size: .85rem; }
+  .chart-card.temp h2 { color: var(--temp); } .chart-card.hum h2 { color: var(--hum); }
 </style>
 </head>
 <body>
@@ -63,7 +83,7 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
   <p class="sub">ESP32-S3 · DHT11</p>
   <div class="grid">
     <section class="card temp">
-      <svg viewBox="0 0 24 24"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 9v7"/></svg>
+      <svg viewBox="0 0 23 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/><path d="M11.5 18.5V9"/><circle cx="11.5" cy="18.5" r="1.8" style="fill:currentColor"/></svg>
       <div class="value"><span id="t">--</span>°C</div>
       <div class="label">Температура</div>
     </section>
@@ -71,6 +91,18 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
       <svg viewBox="0 0 24 24"><path d="M12 3s6 6.4 6 11a6 6 0 0 1-12 0c0-4.6 6-11 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg>
       <div class="value"><span id="h">--</span>%</div>
       <div class="label">Вологість</div>
+    </section>
+  </div>
+  <div class="charts">
+    <section class="card chart-card temp">
+      <h2>Температура за добу</h2>
+      <canvas id="chartT"></canvas>
+      <div class="range" id="rangeT">мін — · макс —</div>
+    </section>
+    <section class="card chart-card hum">
+      <h2>Вологість за добу</h2>
+      <canvas id="chartH"></canvas>
+      <div class="range" id="rangeH">мін — · макс —</div>
     </section>
   </div>
   <p class="status"><span class="dot" id="dot"></span><span id="st">Завантаження…</span></p>
@@ -92,9 +124,150 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
     }
   }
   update(); setInterval(update, 3000);
+
+  // ---------- Графіки ----------
+  let history = null;   // остання відповідь /history
+  let fetchedAt = 0;    // коли браузер її отримав
+
+  const pad2 = n => String(n).padStart(2, '0');
+  const hhmm = ms => { const d = new Date(ms); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); };
+  const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  // Малює один графік. values: масив чисел або null (розрив лінії).
+  function drawChart(canvas, values, color, decimals) {
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.clientWidth, hgt = canvas.clientHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(hgt * dpr);
+    const c = canvas.getContext('2d');
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);   // далі малюємо в CSS-пікселях
+    c.clearRect(0, 0, w, hgt);
+    c.font = '11px -apple-system, "Segoe UI", Roboto, sans-serif';
+
+    const muted = cssVar('--muted');
+    const valid = values.filter(v => v !== null);
+    if (values.length < 2 || valid.length < 2) {
+      c.fillStyle = muted; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText('Мало даних', w / 2, hgt / 2);
+      return;
+    }
+
+    // Межі осі Y з невеликим запасом
+    let lo = Math.min(...valid), hi = Math.max(...valid);
+    if (hi - lo < 1) { lo -= 0.5; hi += 0.5; }
+    const margin = (hi - lo) * 0.1;
+    lo -= margin; hi += margin;
+
+    const L = 38, R = 8, T = 8, B = 22;               // відступи під підписи
+    const pw = w - L - R, ph = hgt - T - B;
+    const x = i => L + pw * i / (values.length - 1);
+    const y = v => T + ph * (1 - (v - lo) / (hi - lo));
+
+    // Сітка і підписи осі Y (4 лінії)
+    c.strokeStyle = muted; c.fillStyle = muted; c.lineWidth = 1;
+    c.textAlign = 'right'; c.textBaseline = 'middle';
+    for (let k = 0; k < 4; k++) {
+      const v = lo + (hi - lo) * k / 3, yy = Math.round(y(v)) + 0.5;
+      c.globalAlpha = 0.25;
+      c.beginPath(); c.moveTo(L, yy); c.lineTo(w - R, yy); c.stroke();
+      c.globalAlpha = 1;
+      c.fillText(v.toFixed(decimals), L - 6, yy);
+    }
+
+    // Підписи часу по осі X (5 штук)
+    c.textBaseline = 'top';
+    const n = values.length;
+    for (let k = 0; k < 5; k++) {
+      const i = Math.round(k * (n - 1) / 4);
+      const ms = fetchedAt - (history.age + (n - 1 - i) * history.step) * 1000;
+      c.textAlign = k === 0 ? 'left' : k === 4 ? 'right' : 'center';
+      c.fillText(hhmm(ms), x(i), hgt - B + 6);
+    }
+
+    // Лінія і заливка: ламаємо шлях там, де null
+    c.strokeStyle = color; c.fillStyle = color; c.lineWidth = 2;
+    c.lineJoin = 'round';
+    let start = -1;
+    const flush = end => {            // малює відрізок start..end
+      if (start < 0) return;
+      if (start === end) {            // одинока точка
+        c.beginPath(); c.arc(x(start), y(values[start]), 2.5, 0, 7); c.fill();
+      } else {
+        c.beginPath();
+        c.moveTo(x(start), y(values[start]));
+        for (let i = start + 1; i <= end; i++) c.lineTo(x(i), y(values[i]));
+        c.stroke();
+        c.lineTo(x(end), T + ph); c.lineTo(x(start), T + ph); c.closePath();
+        c.globalAlpha = 0.18; c.fill(); c.globalAlpha = 1;
+      }
+      start = -1;
+    };
+    for (let i = 0; i < n; i++) {
+      if (values[i] === null) flush(i - 1);
+      else if (start < 0) start = i;
+    }
+    flush(n - 1);
+  }
+
+  function rangeText(values, unit, decimals) {
+    const valid = values.filter(v => v !== null);
+    if (!valid.length) return 'мін — · макс —';
+    return 'мін ' + Math.min(...valid).toFixed(decimals) + ' ' + unit +
+           ' · макс ' + Math.max(...valid).toFixed(decimals) + ' ' + unit;
+  }
+
+  function redrawCharts() {
+    const tv = history ? history.t : [], hv = history ? history.h : [];
+    drawChart(document.getElementById('chartT'), tv, cssVar('--temp'), 1);
+    drawChart(document.getElementById('chartH'), hv, cssVar('--hum'), 0);
+    document.getElementById('rangeT').textContent = rangeText(tv, '°C', 1);
+    document.getElementById('rangeH').textContent = rangeText(hv, '%', 0);
+  }
+
+  async function loadHistory() {
+    try {
+      const r = await fetch('/history');
+      history = await r.json();
+      fetchedAt = Date.now();
+      redrawCharts();
+    } catch (e) { /* залишаємо стару історію */ }
+  }
+
+  loadHistory(); setInterval(loadHistory, 60000);
+  window.addEventListener('resize', redrawCharts);
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', redrawCharts);
 </script>
 </body>
 </html>)rawliteral";
+
+// Записує одну точку в кільцевий буфер.
+void saveSample() {
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  if (isnan(t) || isnan(h)) {
+    histT[histHead] = NO_DATA;
+    histH[histHead] = NO_DATA;
+  } else {
+    histT[histHead] = (int16_t)lroundf(t * 10);
+    histH[histHead] = (int16_t)lroundf(h);
+  }
+  histHead = (histHead + 1) % HISTORY_SIZE;
+  if (histCount < HISTORY_SIZE) histCount++;
+  lastSampleMs = millis();
+}
+
+// Викликається з loop(): без delay(), лише порівнюємо millis().
+void sampleTick() {
+  uint32_t now = millis();
+  if (!firstSampleDone) {
+    if (now >= FIRST_SAMPLE_MS) {
+      firstSampleDone = true;
+      saveSample();
+    }
+  } else if (now - lastSampleMs >= (uint32_t)SAMPLE_SEC * 1000UL) {
+    saveSample();
+  }
+}
 
 void handleRoot() {
   server.send_P(200, "text/html; charset=utf-8", PAGE);
@@ -109,6 +282,32 @@ void handleData() {
   } else {
     json = "{\"ok\":true,\"t\":" + String(t, 1) + ",\"h\":" + String(h, 0) + "}";
   }
+  server.send(200, "application/json", json);
+}
+
+// Історія: від найстаршої точки до найновішої. null = датчик не відповів.
+void handleHistory() {
+  String json;
+  json.reserve(histCount * 14 + 64);
+  json = "{\"step\":" + String(SAMPLE_SEC) +
+         ",\"age\":" + String(histCount ? (millis() - lastSampleMs) / 1000 : 0);
+
+  // Найстарша точка: якщо буфер повний, це histHead, інакше 0.
+  uint16_t first = (histHead + HISTORY_SIZE - histCount) % HISTORY_SIZE;
+
+  json += ",\"t\":[";
+  for (uint16_t i = 0; i < histCount; i++) {
+    int16_t v = histT[(first + i) % HISTORY_SIZE];
+    if (i) json += ',';
+    json += (v == NO_DATA) ? String("null") : String(v / 10.0f, 1);
+  }
+  json += "],\"h\":[";
+  for (uint16_t i = 0; i < histCount; i++) {
+    int16_t v = histH[(first + i) % HISTORY_SIZE];
+    if (i) json += ',';
+    json += (v == NO_DATA) ? String("null") : String(v);
+  }
+  json += "]}";
   server.send(200, "application/json", json);
 }
 
@@ -129,9 +328,11 @@ void setup() {
 
   server.on("/", handleRoot);
   server.on("/data", handleData);
+  server.on("/history", handleHistory);
   server.begin();
 }
 
 void loop() {
   server.handleClient();
+  sampleTick();
 }
