@@ -12,6 +12,10 @@
 #define DHT_PIN  4
 #define DHT_TYPE DHT11
 
+// --- Світлодіод ---
+// GPIO6 -> резистор 220 Ом -> LED -> GND. HIGH = світиться.
+#define LED_PIN 6
+
 // --- Історія вимірів ---
 #define SAMPLE_SEC    300   // як часто записувати точку, секунд (для перевірки постав 10)
 #define HISTORY_SIZE  288   // 288 точок * 5 хв = 24 години
@@ -30,6 +34,8 @@ uint16_t histCount = 0;   // скільки точок вже записано (
 uint32_t lastSampleMs = 0;  // millis() останнього запису
 bool firstSampleDone = false;
 
+bool ledOn = false;   // поточний стан світлодіода (при старті вимкнено)
+
 const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -39,11 +45,11 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
 <style>
   :root {
     --bg1: #0f172a; --bg2: #1e293b; --card: rgba(255,255,255,.07);
-    --text: #f1f5f9; --muted: #94a3b8; --temp: #fb923c; --hum: #38bdf8;
+    --text: #f1f5f9; --muted: #94a3b8; --temp: #fb923c; --hum: #38bdf8; --led: #facc15;
   }
   @media (prefers-color-scheme: light) {
     :root { --bg1: #e0f2fe; --bg2: #f8fafc; --card: rgba(255,255,255,.85);
-            --text: #0f172a; --muted: #64748b; --temp: #ea580c; --hum: #0284c7; }
+            --text: #0f172a; --muted: #64748b; --temp: #ea580c; --hum: #0284c7; --led: #eab308; }
   }
   * { box-sizing: border-box; margin: 0; }
   body {
@@ -69,6 +75,19 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
   .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
          background: #22c55e; margin-right: 6px; }
   .dot.err { background: #ef4444; }
+  .light svg { stroke: var(--led); }
+  .light .value { font-size: 1.4rem; margin: 6px 0 16px; color: var(--muted); }
+  .light.on .value { color: var(--led); }
+  /* Великий перемикач: кнопка-доріжка з круглою ручкою */
+  .switch { position: relative; width: 96px; height: 52px; border: 0; border-radius: 26px;
+            background: rgba(148,163,184,.35); cursor: pointer; transition: background .2s; }
+  .switch::after { content: ""; position: absolute; top: 4px; left: 4px; width: 44px; height: 44px;
+                   border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3);
+                   transition: transform .2s; }
+  .switch[aria-checked="true"] { background: var(--led); }
+  .switch[aria-checked="true"]::after { transform: translateX(44px); }
+  .switch:disabled { opacity: .6; cursor: wait; }
+  .switch:focus-visible { outline: 3px solid var(--led); outline-offset: 3px; }
   .charts { display: grid; gap: 16px; margin-top: 16px; }
   .chart-card { padding: 20px 16px 16px; }
   .chart-card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 10px; }
@@ -93,6 +112,13 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
       <div class="label">Вологість</div>
     </section>
   </div>
+  <section class="card light" id="ledCard" style="margin-top:16px">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>
+    <div class="value" id="ledText">--</div>
+    <button class="switch" id="ledSw" role="switch" aria-checked="false" aria-label="Світло" disabled></button>
+    <div class="label" style="margin-top:12px">Світло</div>
+  </section>
+
   <div class="charts">
     <section class="card chart-card temp">
       <h2>Температура за добу</h2>
@@ -108,6 +134,36 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
   <p class="status"><span class="dot" id="dot"></span><span id="st">Завантаження…</span></p>
 </main>
 <script>
+  // ---------- Світло ----------
+  let ledBusy = false;   // true, поки йде запит до ESP32
+
+  // Показує стан на перемикачі (стан завжди бере з відповіді ESP32)
+  function showLed(on) {
+    ledSw.setAttribute('aria-checked', on);
+    ledSw.disabled = ledBusy;
+    ledText.textContent = on ? 'Увімкнено' : 'Вимкнено';
+    ledCard.classList.toggle('on', on);
+  }
+
+  ledSw.addEventListener('click', async () => {
+    const was = ledSw.getAttribute('aria-checked') === 'true';
+    ledBusy = true; ledSw.disabled = true;   // блокуємо на час запиту
+    try {
+      const r = await fetch('/led', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'state=' + (was ? 'off' : 'on'),
+      });
+      if (!r.ok) throw new Error('http ' + r.status);
+      const d = await r.json();
+      ledBusy = false; showLed(d.on);         // показуємо те, що повернула ESP32
+    } catch (e) {
+      ledBusy = false; showLed(was);          // помилка: повертаємо старий стан
+      dot.className = 'dot err';
+      st.textContent = 'Помилка керування світлом';
+    }
+  });
+
   async function update() {
     try {
       const r = await fetch('/data');
@@ -115,6 +171,7 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
       if (d.ok) {
         t.textContent = d.t.toFixed(1);
         h.textContent = Math.round(d.h);
+        if (!ledBusy) showLed(d.led);   // синхронізуємо світло з ESP32
         dot.className = 'dot';
         st.textContent = 'Оновлено ' + new Date().toLocaleTimeString('uk-UA');
       } else throw 0;
@@ -278,11 +335,44 @@ void handleData() {
   float h = dht.readHumidity();
   String json;
   if (isnan(t) || isnan(h)) {
-    json = "{\"ok\":false}";
+    json = "{\"ok\":false,\"led\":" + String(ledOn ? "true" : "false") + "}";
   } else {
-    json = "{\"ok\":true,\"t\":" + String(t, 1) + ",\"h\":" + String(h, 0) + "}";
+    json = "{\"ok\":true,\"t\":" + String(t, 1) + ",\"h\":" + String(h, 0) +
+           ",\"led\":" + String(ledOn ? "true" : "false") + "}";
   }
   server.send(200, "application/json", json);
+}
+
+// Вмикає/вимикає світлодіод і пише в Serial, хто це зробив (IP клієнта).
+void setLed(bool on) {
+  ledOn = on;
+  digitalWrite(LED_PIN, ledOn ? HIGH : LOW);
+  Serial.printf("LED: %s (клієнт %s)\n", ledOn ? "увімкнено" : "вимкнено",
+                server.client().remoteIP().toString().c_str());
+}
+
+void sendLedState() {
+  server.send(200, "application/json", String("{\"on\":") + (ledOn ? "true" : "false") + "}");
+}
+
+// GET /led -> {"on":true|false}
+void handleLedGet() {
+  sendLedState();
+}
+
+// POST /led, параметр state = on | off | toggle
+void handleLedPost() {
+  String state = server.arg("state");
+  if (state == "on")           setLed(true);
+  else if (state == "off")     setLed(false);
+  else if (state == "toggle")  setLed(!ledOn);
+  else {
+    Serial.printf("LED: неправильний запит state=\"%s\" (клієнт %s)\n", state.c_str(),
+                  server.client().remoteIP().toString().c_str());
+    server.send(400, "application/json", "{\"error\":\"state must be on, off or toggle\"}");
+    return;
+  }
+  sendLedState();
 }
 
 // Історія: від найстаршої точки до найновішої. null = датчик не відповів.
@@ -315,6 +405,8 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   dht.begin();
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);   // при старті світлодіод вимкнено
 
   WiFi.begin(WIFI_NAME, WIFI_PASS);
   Serial.print("Підключаюсь до Wi-Fi");
@@ -329,6 +421,8 @@ void setup() {
   server.on("/", handleRoot);
   server.on("/data", handleData);
   server.on("/history", handleHistory);
+  server.on("/led", HTTP_GET, handleLedGet);
+  server.on("/led", HTTP_POST, handleLedPost);
   server.begin();
 }
 

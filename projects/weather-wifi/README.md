@@ -11,6 +11,8 @@ It reads temperature and humidity from a DHT11 sensor and serves them on a small
 | GND   | GND      |
 | DATA  | GPIO4    |
 
+LED: GPIO6 -> 220 Ω resistor -> LED -> GND (HIGH = on).
+
 ## Setup
 
 1. Copy `include/secrets.h.example` to `include/secrets.h` and set your Wi-Fi name and password
@@ -23,7 +25,14 @@ It reads temperature and humidity from a DHT11 sensor and serves them on a small
 
 - `/` — page with temperature and humidity cards (centered, light/dark theme, refreshes every 3 s)
   and two 24-hour charts drawn on a canvas (no external libraries; history reloads every minute).
-- `/data` — JSON endpoint: `{"ok":true,"t":23.5,"h":45}`; `{"ok":false}` if the sensor cannot be read.
+  A "Світло" card has a toggle switch for the LED; it shows the state returned by the ESP32 and
+  syncs every 3 s, so several phones see the same state.
+- `/data` — JSON endpoint: `{"ok":true,"t":23.5,"h":45,"led":false}`; `{"ok":false,"led":false}` if the sensor cannot be read.
+- `/led` — LED control (off after boot):
+  - `GET /led` returns `{"on":true|false}`.
+  - `POST /led` with `state=on|off|toggle` changes the state and returns the new `{"on":...}`;
+    any other value returns `400`. Every change is logged to Serial with the client IP.
+    Example: `curl -X POST -d state=toggle http://<device-ip>/led`.
 - `/history` — JSON with the last 24 h, oldest point first:
   `{"step":300,"age":120,"t":[23.4,null,...],"h":[45,null,...]}`.
   `step` is seconds between points, `age` is seconds since the newest point, `null` means the sensor did not respond.
