@@ -8,6 +8,7 @@ A collection of my embedded projects. Each project lives in its own folder under
 | --- | --- | --- |
 | [blink](projects/blink) | Freenove ESP32-S3 WROOM | Two LEDs with button-switched blinking modes |
 | [voltage-divider](projects/voltage-divider) | Freenove ESP32-S3 WROOM | Photoresistor voltage divider that switches a relay on in the dark |
+| [weather-wifi](projects/weather-wifi) | Freenove ESP32-S3 WROOM | Weather station over WiFi (work in progress) |
 
 ## Layout
 
