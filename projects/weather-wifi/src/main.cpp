@@ -6,15 +6,24 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <DHT.h>
+#include <Preferences.h>   // збереження налаштувань у флеш (NVS)
 
 #include "secrets.h"   // WIFI_NAME і WIFI_PASS (файл не потрапляє в git)
 
 #define DHT_PIN  4
 #define DHT_TYPE DHT11
 
-// --- Світлодіод ---
-// GPIO6 -> резистор 220 Ом -> LED -> GND. HIGH = світиться.
-#define LED_PIN 6
+// --- Світло (ШІМ) ---
+// GPIO5 -> резистор 1 кОм -> база BC547. У колекторі 3 світлодіоди з резисторами 220 Ом від 5 В.
+// HIGH на GPIO5 відкриває транзистор і світлодіоди світяться.
+//
+// ШІМ (PWM) швидко вмикає і вимикає пін. Яскравість залежить від того, яку частку
+// часу пін увімкнений. Ця частка називається duty (шпаруватість): 0 = завжди вимкнено,
+// 255 = завжди увімкнено (8 біт -> значення 0..255).
+#define PWM_PIN        6
+#define PWM_FREQ       5000   // частота ШІМ, Гц (для кулера постав 20000)
+#define PWM_RES        8      // розрядність: 8 біт -> duty 0..255
+#define NVS_SAVE_MS    2000   // писати у флеш не раніше ніж через 2 с після останньої зміни
 
 // --- Історія вимірів ---
 #define SAMPLE_SEC    300   // як часто записувати точку, секунд (для перевірки постав 10)
@@ -34,7 +43,13 @@ uint16_t histCount = 0;   // скільки точок вже записано (
 uint32_t lastSampleMs = 0;  // millis() останнього запису
 bool firstSampleDone = false;
 
-bool ledOn = false;   // поточний стан світлодіода (при старті вимкнено)
+// Стан світла
+bool ledOn = false;        // увімкнено чи ні
+uint8_t ledLevel = 100;    // останній рівень яскравості, 0..100 %
+
+Preferences prefs;         // сховище NVS у флеш-памʼяті
+bool prefsDirty = false;   // true = є незбережені зміни
+uint32_t lastChangeMs = 0; // коли стан змінювали востаннє
 
 const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
 <html lang="uk">
@@ -88,6 +103,8 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
   .switch[aria-checked="true"]::after { transform: translateX(44px); }
   .switch:disabled { opacity: .6; cursor: wait; }
   .switch:focus-visible { outline: 3px solid var(--led); outline-offset: 3px; }
+  /* Повзунок яскравості */
+  .slider { width: 100%; max-width: 320px; margin: 18px 0 4px; accent-color: var(--led); height: 28px; }
   .charts { display: grid; gap: 16px; margin-top: 16px; }
   .chart-card { padding: 20px 16px 16px; }
   .chart-card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 10px; }
@@ -114,9 +131,10 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
   </div>
   <section class="card light" id="ledCard" style="margin-top:16px">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>
-    <div class="value" id="ledText">--</div>
+    <div class="value"><span id="lvlText">--</span>%</div>
     <button class="switch" id="ledSw" role="switch" aria-checked="false" aria-label="Світло" disabled></button>
-    <div class="label" style="margin-top:12px">Світло</div>
+    <div><input class="slider" id="lvl" type="range" min="0" max="100" step="1" value="0" aria-label="Яскравість" disabled></div>
+    <div class="label" id="ledText" style="margin-top:8px">Світло</div>
   </section>
 
   <div class="charts">
@@ -135,33 +153,76 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
 </main>
 <script>
   // ---------- Світло ----------
-  let ledBusy = false;   // true, поки йде запит до ESP32
+  // Стан завжди беремо з відповіді ESP32. Повзунок і перемикач лише відправляють запити.
+  let lastGood = { on: false, level: 0 };  // останній стан, який підтвердила ESP32
+  let inFlight = false;   // true, поки йде запит
+  let queued = null;      // наступний запит, якщо новий з'явився під час попереднього
+  let dragging = false;   // true, поки повзунок тягнуть
+  let lastSent = 0;       // коли востаннє відправляли запит (для ліміту 150 мс)
+  let timer = null;       // таймер відкладеної відправки
 
-  // Показує стан на перемикачі (стан завжди бере з відповіді ESP32)
-  function showLed(on) {
-    ledSw.setAttribute('aria-checked', on);
-    ledSw.disabled = ledBusy;
-    ledText.textContent = on ? 'Увімкнено' : 'Вимкнено';
-    ledCard.classList.toggle('on', on);
+  const busy = () => dragging || inFlight || queued || timer;
+
+  // Малює стан на сторінці. Повзунок не чіпаємо, поки його тягнуть.
+  function showLight(s) {
+    ledSw.setAttribute('aria-checked', s.on);
+    ledSw.disabled = inFlight;
+    lvl.disabled = false;
+    if (!dragging) { lvl.value = s.level; lvlText.textContent = s.level; }
+    ledText.textContent = 'Світло: ' + (s.on ? 'увімкнено' : 'вимкнено');
+    ledCard.classList.toggle('on', s.on);
   }
 
-  ledSw.addEventListener('click', async () => {
-    const was = ledSw.getAttribute('aria-checked') === 'true';
-    ledBusy = true; ledSw.disabled = true;   // блокуємо на час запиту
+  // Відправляє POST /pwm; якщо вже йде запит, запам'ятовує останній.
+  async function post(params) {
+    if (inFlight) { queued = params; return; }
+    inFlight = true; lastSent = Date.now();
+    ledSw.disabled = true;
     try {
-      const r = await fetch('/led', {
+      const r = await fetch('/pwm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'state=' + (was ? 'off' : 'on'),
+        body: params,
       });
       if (!r.ok) throw new Error('http ' + r.status);
-      const d = await r.json();
-      ledBusy = false; showLed(d.on);         // показуємо те, що повернула ESP32
+      lastGood = await r.json();
+      inFlight = false;
+      if (!queued) showLight(lastGood);    // показуємо те, що повернула ESP32
     } catch (e) {
-      ledBusy = false; showLed(was);          // помилка: повертаємо старий стан
+      inFlight = false; queued = null; dragging = false;
+      showLight(lastGood);                 // помилка: повертаємо старий стан
       dot.className = 'dot err';
       st.textContent = 'Помилка керування світлом';
     }
+    if (queued) { const q = queued; queued = null; post(q); }
+  }
+
+  // Параметри для повзунка. Якщо світло вимкнене, а повзунок > 0 — вмикаємо.
+  function sliderParams() {
+    const v = +lvl.value;
+    return 'level=' + v + (v > 0 && !lastGood.on ? '&on=1' : '');
+  }
+
+  // Під час перетягування: не частіше ніж раз на 150 мс.
+  lvl.addEventListener('input', () => {
+    dragging = true;
+    lvlText.textContent = lvl.value;
+    const wait = 150 - (Date.now() - lastSent);
+    if (wait <= 0) post(sliderParams());
+    else if (!timer) timer = setTimeout(() => { timer = null; post(sliderParams()); }, wait);
+  });
+
+  // Відпустили повзунок: обовʼязково відправляємо фінальне значення.
+  lvl.addEventListener('change', () => {
+    clearTimeout(timer); timer = null;
+    post(sliderParams());
+    dragging = false;
+  });
+
+  ledSw.addEventListener('click', () => {
+    const was = ledSw.getAttribute('aria-checked') === 'true';
+    // Вмикаємо з останнім рівнем; якщо він 0 — ставимо 100 %, щоб щось світилося
+    post('on=' + (was ? 0 : 1) + (!was && lastGood.level === 0 ? '&level=100' : ''));
   });
 
   async function update() {
@@ -171,7 +232,7 @@ const char PAGE[] PROGMEM = R"rawliteral(<!DOCTYPE html>
       if (d.ok) {
         t.textContent = d.t.toFixed(1);
         h.textContent = Math.round(d.h);
-        if (!ledBusy) showLed(d.led);   // синхронізуємо світло з ESP32
+        if (!busy()) { lastGood = { on: d.on, level: d.level }; showLight(lastGood); }  // синхронізація
         dot.className = 'dot';
         st.textContent = 'Оновлено ' + new Date().toLocaleTimeString('uk-UA');
       } else throw 0;
@@ -335,44 +396,97 @@ void handleData() {
   float h = dht.readHumidity();
   String json;
   if (isnan(t) || isnan(h)) {
-    json = "{\"ok\":false,\"led\":" + String(ledOn ? "true" : "false") + "}";
+    json = "{\"ok\":false,\"on\":" + String(ledOn ? "true" : "false") +
+           ",\"level\":" + String(ledLevel) + "}";
   } else {
     json = "{\"ok\":true,\"t\":" + String(t, 1) + ",\"h\":" + String(h, 0) +
-           ",\"led\":" + String(ledOn ? "true" : "false") + "}";
+           ",\"on\":" + String(ledOn ? "true" : "false") +
+           ",\"level\":" + String(ledLevel) + "}";
   }
   server.send(200, "application/json", json);
 }
 
-// Вмикає/вимикає світлодіод і пише в Serial, хто це зробив (IP клієнта).
-void setLed(bool on) {
-  ledOn = on;
-  digitalWrite(LED_PIN, ledOn ? HIGH : LOW);
-  Serial.printf("LED: %s (клієнт %s)\n", ledOn ? "увімкнено" : "вимкнено",
-                server.client().remoteIP().toString().c_str());
+// Гамма-корекція. Око сприймає яскравість нелінійно: різниця між duty 10 і 20
+// помітна, а між 200 і 210 майже ні. Тому рівень 0..100 % піднімаємо до степеня 2.2:
+// тоді повзунок змінює яскравість рівномірно "на око".
+uint8_t levelToDuty(uint8_t level) {
+  if (level == 0) return 0;
+  float duty = 255.0f * powf(level / 100.0f, 2.2f);
+  return max<uint8_t>(1, (uint8_t)lroundf(duty));   // мінімум 1, щоб рівень > 0 не гас зовсім
 }
 
-void sendLedState() {
-  server.send(200, "application/json", String("{\"on\":") + (ledOn ? "true" : "false") + "}");
+// Подає на пін потрібний duty: вимкнено = 0, увімкнено = за рівнем.
+void applyPwm() {
+  ledcWrite(PWM_PIN, ledOn ? levelToDuty(ledLevel) : 0);   // у Arduino-ESP32 3.x ledcWrite приймає номер піна
 }
 
-// GET /led -> {"on":true|false}
-void handleLedGet() {
-  sendLedState();
+// Позначає, що стан треба зберегти. Саме збереження робить persistTick().
+void markDirty() {
+  prefsDirty = true;
+  lastChangeMs = millis();
 }
 
-// POST /led, параметр state = on | off | toggle
-void handleLedPost() {
-  String state = server.arg("state");
-  if (state == "on")           setLed(true);
-  else if (state == "off")     setLed(false);
-  else if (state == "toggle")  setLed(!ledOn);
-  else {
-    Serial.printf("LED: неправильний запит state=\"%s\" (клієнт %s)\n", state.c_str(),
-                  server.client().remoteIP().toString().c_str());
-    server.send(400, "application/json", "{\"error\":\"state must be on, off or toggle\"}");
+// Викликається з loop(): зберігає стан у флеш не частіше ніж раз на 2 с після зміни,
+// щоб не зношувати флеш (кількість записів обмежена).
+void persistTick() {
+  if (prefsDirty && millis() - lastChangeMs >= NVS_SAVE_MS) {
+    prefs.putBool("on", ledOn);
+    prefs.putUChar("level", ledLevel);
+    prefsDirty = false;
+    Serial.println("Світло: стан збережено у флеш");
+  }
+}
+
+void sendPwmState() {
+  server.send(200, "application/json",
+              String("{\"on\":") + (ledOn ? "true" : "false") +
+              ",\"level\":" + String(ledLevel) + "}");
+}
+
+// Перевіряє, що рядок - ціле число 0..100 (без пробілів, мінусів, літер).
+bool parseLevel(const String& str, uint8_t& out) {
+  if (str.length() == 0 || str.length() > 3) return false;
+  for (size_t i = 0; i < str.length(); i++) if (!isDigit(str[i])) return false;
+  int v = str.toInt();
+  if (v > 100) return false;
+  out = (uint8_t)v;
+  return true;
+}
+
+// GET /pwm -> {"on":true,"level":60}
+void handlePwmGet() {
+  sendPwmState();
+}
+
+// POST /pwm, параметри: on=0|1 і/або level=0..100.
+void handlePwmPost() {
+  bool hasOn = server.hasArg("on"), hasLevel = server.hasArg("level");
+  bool newOn = ledOn;
+  uint8_t newLevel = ledLevel;
+  bool valid = hasOn || hasLevel;   // хоча б один параметр обовʼязковий
+
+  if (hasOn) {
+    String v = server.arg("on");
+    if (v == "1") newOn = true;
+    else if (v == "0") newOn = false;
+    else valid = false;
+  }
+  if (hasLevel && !parseLevel(server.arg("level"), newLevel)) valid = false;
+
+  String who = server.client().remoteIP().toString();
+  if (!valid) {
+    Serial.printf("Світло: неправильний запит (клієнт %s)\n", who.c_str());
+    server.send(400, "application/json", "{\"error\":\"use on=0|1 and/or level=0..100\"}");
     return;
   }
-  sendLedState();
+
+  ledOn = newOn;
+  ledLevel = newLevel;
+  applyPwm();
+  markDirty();
+  Serial.printf("Світло: %s, рівень %u%% (клієнт %s)\n", ledOn ? "увімкнено" : "вимкнено",
+                ledLevel, who.c_str());
+  sendPwmState();
 }
 
 // Історія: від найстаршої точки до найновішої. null = датчик не відповів.
@@ -405,8 +519,14 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   dht.begin();
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);   // при старті світлодіод вимкнено
+
+  // Читаємо збережений стан (якщо його ще не було — світло вимкнено, рівень 100 %)
+  prefs.begin("light", false);
+  ledOn = prefs.getBool("on", false);
+  ledLevel = min<uint8_t>(prefs.getUChar("level", 100), 100);
+
+  ledcAttach(PWM_PIN, PWM_FREQ, PWM_RES);   // Arduino-ESP32 3.x: пін + частота + розрядність
+  applyPwm();
 
   WiFi.begin(WIFI_NAME, WIFI_PASS);
   Serial.print("Підключаюсь до Wi-Fi");
@@ -421,12 +541,13 @@ void setup() {
   server.on("/", handleRoot);
   server.on("/data", handleData);
   server.on("/history", handleHistory);
-  server.on("/led", HTTP_GET, handleLedGet);
-  server.on("/led", HTTP_POST, handleLedPost);
+  server.on("/pwm", HTTP_GET, handlePwmGet);
+  server.on("/pwm", HTTP_POST, handlePwmPost);
   server.begin();
 }
 
 void loop() {
   server.handleClient();
   sampleTick();
+  persistTick();
 }
