@@ -11,7 +11,8 @@ It reads temperature and humidity from a DHT11 sensor and serves them on a small
 | GND   | GND      |
 | DATA  | GPIO4    |
 
-LED: GPIO6 -> 220 Ω resistor -> LED -> GND (HIGH = on).
+Light (PWM): GPIO5 -> 1 kΩ -> base of a BC547 transistor. The load (3 LEDs, each with a 220 Ω resistor, from 5 V)
+sits in the collector. HIGH = on. PWM is 8-bit at `PWM_FREQ` (5000 Hz by default, e.g. 20000 for a fan).
 
 ## Setup
 
@@ -25,18 +26,17 @@ LED: GPIO6 -> 220 Ω resistor -> LED -> GND (HIGH = on).
 
 - `/` — page with temperature and humidity cards (centered, light/dark theme, refreshes every 3 s)
   and two 24-hour charts drawn on a canvas (no external libraries; history reloads every minute).
-  A "Світло" card has a toggle switch for the LED; it shows the state returned by the ESP32 and
-  syncs every 3 s, so several phones see the same state.
-- `/data` — JSON endpoint: `{"ok":true,"t":23.5,"h":45,"led":false}`; `{"ok":false,"led":false}` if the sensor cannot be read.
-- `/led` — LED control (off after boot):
-  - `GET /led` returns `{"on":true|false}`.
-  - `POST /led` with `state=on|off|toggle` changes the state and returns the new `{"on":...}`;
-    any other value returns `400`. Every change is logged to Serial with the client IP.
-    Example: `curl -X POST -d state=toggle http://<device-ip>/led`.
-- `/history` — JSON with the last 24 h, oldest point first:
-  `{"step":300,"age":120,"t":[23.4,null,...],"h":[45,null,...]}`.
-  `step` is seconds between points, `age` is seconds since the newest point, `null` means the sensor did not respond.
-  The browser computes each point's time as `now - (age + (n-1-i)*step)`, so no NTP is needed.
+  A "Світло" card has a toggle switch and a 0–100 % brightness slider; it shows the state returned by the
+  ESP32 and syncs every 3 s, so several phones see the same state. While dragging, requests are sent at most
+  every 150 ms, and the final value is always sent on release.
+- `/data` — JSON endpoint: `{"ok":true,"t":23.5,"h":45,"on":false,"level":60}`; `{"ok":false,"on":false,"level":60}` if the sensor cannot be read.
+- `/pwm` — light control:
+  - `GET /pwm` returns `{"on":true,"level":60}`.
+  - `POST /pwm` with `on=0|1` and/or `level=0..100` changes the state and returns the new one;
+    invalid values return `400`. Every change is logged to Serial with the client IP.
+    Example: `curl -X POST -d "on=1&level=60" http://<device-ip>/pwm`.
+  - The level (0–100 %) is converted to PWM duty (0–255) with gamma 2.2, so brightness changes look even.
+  - `on` and `level` are saved to flash (NVS) at most once per 2 s after a change and restored after reboot.
 
 ## History
 
